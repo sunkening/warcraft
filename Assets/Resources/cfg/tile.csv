@@ -1,0 +1,6 @@
+id,资源路径,资源名字,类型,高度,陆地单位可通过,备注
+id,resourcePath,resourceName,type,height,landAllowed,remark
+int,string,string,int,float,bool,string
+1,terrainart/ashenvale,ashen_dirt.png,1,0,TRUE,
+2,terrainart/ashenvale,ashen_dirtrough.png,1,1,TRUE,
+3,terrainart/ashenvale,ashen_grass.png,1,2,TRUE,

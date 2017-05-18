@@ -1,0 +1,4 @@
+id,资源路径,资源名称,备注
+id,resourcePath,resourceName,remark
+int,string,string,string
+1,terrainart,maptile.prefab,地图tile的prefab

@@ -1,0 +1,4 @@
+id,名称,行走动画,站立动画1,站立动画2,攻击动画,死亡动画
+id,name,runAnim,idleAnim1,idleAnim2,attackAnim,dieAnim
+int,string,List<int>,List<int>,List<int>,List<int>,int
+1,archer,0|1|2|3|0|0|0|0,,,,

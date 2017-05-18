@@ -1,0 +1,4 @@
+id,名称,spritId
+id,name,spritId
+int,string,int
+1,archer,1

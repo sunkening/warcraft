@@ -1,0 +1,5 @@
+主键,名称,备注
+id,name,remark
+int,string,string
+0,cube,方块
+1,simpleIcon,3D图标
