@@ -276,7 +276,7 @@ public class Unit
         int frame;
         UnitState state;
         bool constructed;
-        PlayerColorSprite sprite;
+       CharacterSprite sprite;
         ResourceInfo resinfo;
        // CConstructionFrame* cframe;
         UnitType type;
@@ -407,7 +407,7 @@ public class Unit
         }
         else
         {
-            this.spriteDrawer.drawUnitType(sprite, this.Player.Index, frame);
+            this.spriteDrawer.drawUnitType(sprite.runAnim, this.Player.Index, frame);
             //DrawUnitType(type, sprite,
             //    this.RescuedFrom ? this->RescuedFrom->Index : this->Player->Index,
             //    frame, x, y);

@@ -29,7 +29,7 @@ public class SpriteDrawer : MonoBehaviour {
 **  @todo  Do screen position caculation in high level.
 **         Better way to handle in x mirrored sprites.
 */
-    public void drawUnitType(PlayerColorSprite sprite, int player,int frameNum)
+    public void drawUnitType(List<Sprite>[] sprite, int player,int frameNum)
     {
         UnitType type = unit.unitType;
         int direction = (int)unit.direction;
@@ -41,7 +41,7 @@ public class SpriteDrawer : MonoBehaviour {
                 direction = (int)UnitDirection.LookingS - (direction - (int)UnitDirection.LookingS);
             }
         }
-        List<Sprite> frames = sprite.directonFrames[direction];
+        List<Sprite> frames = sprite[direction];
         if (frameNum >= frames.Count) {
             frameNum = 0;
         }

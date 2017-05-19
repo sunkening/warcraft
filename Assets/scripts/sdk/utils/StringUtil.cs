@@ -12,10 +12,10 @@ namespace skn.utils
         const string CFG_TYPE_STRING = "string";
         const string CFG_TYPE_FLOAT = "float";
         const string CFG_TYPE_BOOL = "bool";
-        const string CFG_TYPE_LIST_BOOL = "list<bool>";
-        const string CFG_TYPE_LIST_INT = "list<int>";
-        const string CFG_TYPE_LIST_STRING = "list<string>";
-        const string CFG_TYPE_LIST_FLOAT = "list<float>";
+        const string CFG_TYPE_LIST_BOOL = "List<bool>";
+        const string CFG_TYPE_LIST_INT = "List<int>";
+        const string CFG_TYPE_LIST_STRING = "List<string>";
+        const string CFG_TYPE_LIST_FLOAT = "List<float>";
         static public object convertValue(string value, string type)
         {
             if (null==value||value=="")

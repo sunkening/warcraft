@@ -15,7 +15,7 @@ public class ResourceInfo {
 	public bool TerrainHarvester;      /// Unit will harvest terrain(wood only for now).
 	public bool LoseResources;         /// The unit will lose it's resource when distracted.
     //  Runtime info:
-    public PlayerColorSprite spriteWhenLoaded; /// The graphic corresponding to FileWhenLoaded.
-	public PlayerColorSprite spriteWhenEmpty;  /// The graphic corresponding to FileWhenEmpty
+    public CharacterSprite spriteWhenLoaded; /// The graphic corresponding to FileWhenLoaded.
+	public CharacterSprite spriteWhenEmpty;  /// The graphic corresponding to FileWhenEmpty
 
 }

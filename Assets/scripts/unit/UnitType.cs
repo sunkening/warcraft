@@ -13,7 +13,7 @@ public class UnitType
     public float height;
     public int numDirections;/// Number of directions the unit can face
     public bool isBuilding;
-    public PlayerColorSprite sprite;
+    public CharacterSprite sprite;
     public bool canCastSpell;
     public bool needFlip ;              /// Flip image when facing left
     public bool isRevealer;//什么类型的单位？

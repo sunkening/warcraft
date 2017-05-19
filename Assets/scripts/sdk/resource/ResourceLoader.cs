@@ -100,10 +100,24 @@ public class ResourceLoader
         task.asset = Resources.Load(task.path + "/" + task.name.Split('.')[0]);
         task.state = STATE_DONE;
     }
+    public static string getNameWithOutExt(string n)
+    {
+        string[] nameArray = n.Split('.');
+        string name = "";
+        for (int i=0;i<nameArray.Length-1;i++)
+        {
+            name += nameArray[i]+".";
+        }
+        
+        name= name.Remove(name.Length - 1, 1);
+         
+        return name;
+    }
     public static IEnumerator loadFromResourcesDirAsync(ResourceLoadTask task)
     {
+        
         //加载resources文件夹里的文件，不能有后缀。
-        ResourceRequest resourceRequest = Resources.LoadAsync(task.path + "/" + task.name.Split('.')[0]);
+        ResourceRequest resourceRequest = Resources.LoadAsync(task.path + "/" + getNameWithOutExt(task.name));
         while (!resourceRequest.isDone)
         {
             yield return true;
