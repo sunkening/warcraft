@@ -95,8 +95,8 @@ public class Map
             tilesets.Add(TileCfg.dataList[i].id, tileset);
         }
         ResourceLoadTask taskMapTilePrefab = new ResourceLoadTask();
-        taskMapTilePrefab.path = ResourcesCfg.get(1).resourcePath;
-        taskMapTilePrefab.name = ResourcesCfg.get(1).resourceName;
+        taskMapTilePrefab.path = PrefabCfg.get(2).resourcePath;
+        taskMapTilePrefab.name = PrefabCfg.get(2).resourceName;
         yield return ResourceLoader.LoadAssetAsync(taskMapTilePrefab);
         mapTilePrefab = taskMapTilePrefab.asset as GameObject;
     }

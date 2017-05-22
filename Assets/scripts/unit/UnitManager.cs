@@ -29,11 +29,22 @@ public class UnitManager   {
     }
     Dictionary<int, List<Sprite>> id2SpriteAnim = new Dictionary<int, List<Sprite>>();
     Dictionary<int, CharacterSprite> id2CharacterSprite = new Dictionary<int, CharacterSprite>();
-    Dictionary<int, UnitType> id2UnitType = new Dictionary<int, UnitType>();
+    public Dictionary<int, UnitType> id2UnitType = new Dictionary<int, UnitType>();
+    public GameObject characrerDrawerPrefab;
+    
+
     public IEnumerator init()
     {
-       
-        
+        PrefabCfg prefabcfg = PrefabCfg.get(1);
+        ResourceLoadTask task = new ResourceLoadTask();
+        task.path = prefabcfg.resourcePath;
+        task.name = prefabcfg.resourceName;
+        yield return ResourceLoader.LoadAssetAsync(task);
+        if (task.asset==null) {
+            Debug.LogError("load charactor drawer prefab erro");
+        }
+
+        characrerDrawerPrefab = task.asset as GameObject;
         foreach (UnitTypeCfg unitTypeCfg in UnitTypeCfg.dataList)
         {
 
@@ -55,7 +66,7 @@ public class UnitManager   {
         {
             SpriteCfg spriteCfg = SpriteCfg.get(spriteCfgId);
             CharacterSprite sprite = new CharacterSprite();
-            Debug.Log(spriteCfg.runAnim);
+            
             for (int i=0;i<8;i++  )
             {
                 int spriteAnimId = spriteCfg.runAnim[i];
@@ -84,15 +95,18 @@ public class UnitManager   {
                         Texture2D texture2d = group.getTaskList()[j].asset as Texture2D;
                         Sprite s = Sprite.Create(texture2d, 
                             new Rect(0,0,texture2d.width,texture2d.height),
-                            new Vector2(texture2d.width/2, texture2d.height/2),
+                            new Vector2(0.5f, 0),
                             spriteAnimCfg.fixelsPerUnit
                             );
+
                         anim.Add(s);
                     }
                     id2SpriteAnim[spriteAnimId] = anim;
 
                 }
+                
                 sprite.runAnim[i] = id2SpriteAnim[spriteAnimId];
+                
             }
             id2CharacterSprite[spriteCfgId] = sprite;
         }

@@ -1,0 +1,13 @@
+
+Library
+*.csproj
+Temp
+
+*.csproj
+/Assembly-CSharp.csproj
+/Assembly-CSharp-Editor.csproj
+/warcraft.sln
+/Assets/StreamingAssets
+/Assets/StreamingAssets.meta
+/tools/csv
+/tools/cs/cfg

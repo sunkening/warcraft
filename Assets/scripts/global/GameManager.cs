@@ -43,9 +43,20 @@ public class GameManager : MonoBehaviour {
         //task.name = "1.0.png";
         //yield return ResourceLoader.LoadAssetAsync(task);
         //print(task.asset);
+        yield return unitManager.init( );
         LoaderResult r = new LoaderResult();
         yield return unitManager.loadUnitType(1, r);
-        print(r.asset);
+        
+        GameObject d=GameObject.Instantiate(unitManager.characrerDrawerPrefab);
+        SpriteDrawer drawer=d.AddComponent<SpriteDrawer>();
+        Unit unit = new Unit();
+        unit.init(unitManager.id2UnitType[1],drawer);
+        unit.direction = UnitDirection.LookingNE;
+        //foreach ( Sprite  l in unit.unitType.sprite.runAnim[1])
+        //{
+        //    Debug.Log(l);
+        //}
+        unit.spriteDrawer.drawUnitType(unit.unitType.sprite.runAnim, 0, 1);
     }
 	
 	// Update is called once per frame

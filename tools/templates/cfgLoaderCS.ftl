@@ -1,25 +1,17 @@
 using System.Collections.Generic;
 using skn.utils;
-namespace  cfg
+namespace  ${entity.namespace}
 {
+ <#-- freemaker 的注释-->
 
- public class SpriteAnimCfg
+ public class ${entity.csvName?cap_first}Cfg
     {
-    	public int id;
-    	public string name;
-    	public bool isMultiple;
-    	public int frameRate;
-    	public int fixelsPerUnit;
-    	public string resourcePath;
-    	public string resourceName;
-    	public int nBegin;
-    	public int nEnd;
-    	public int frameWidth;
-    	public int frameHeight;
-    	public int row;
-        public static List<SpriteAnimCfg> dataList=new List<SpriteAnimCfg>(); 
-        public static Dictionary<int , SpriteAnimCfg> dataMap=new Dictionary<int, SpriteAnimCfg>();
-        public static SpriteAnimCfg get(int id)
+   	 	<#list entity.properties as property>
+    	public ${property.javaType} ${property.propertyName};
+		</#list>
+        public static List<${entity.csvName?cap_first}Cfg> dataList=new List<${entity.csvName?cap_first}Cfg>(); 
+        public static Dictionary<int , ${entity.csvName?cap_first}Cfg> dataMap=new Dictionary<int, ${entity.csvName?cap_first}Cfg>();
+        public static ${entity.csvName?cap_first}Cfg get(int id)
         {
             if (!dataMap.ContainsKey(id))
             {
@@ -50,7 +42,7 @@ namespace  cfg
             }
             while (r.readRecord())
             {
-                SpriteAnimCfg item = new SpriteAnimCfg();
+                ${entity.csvName?cap_first}Cfg item = new ${entity.csvName?cap_first}Cfg();
                 for (int i = 0; i < count; i++)
                 {
                     object value = StringUtil.convertValue(r.get(i), typeList[i]);
@@ -59,10 +51,11 @@ namespace  cfg
                 dataList.Add(item);
             }
             r.close();
-            foreach (SpriteAnimCfg t in dataList)
+            foreach (${entity.csvName?cap_first}Cfg t in dataList)
             {
                 dataMap[t.id] = t;
             }
         }
     }
 }
+    

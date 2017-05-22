@@ -115,7 +115,7 @@ public class Unit
                                 /// NULL if the unit was not rescued.
     /* Seen stuff. */
     //int VisCount[PlayerMax];     /// Unit visibility counts
-	public SeenStuff seen;
+	public SeenStuff seen=new SeenStuff();
 
     //unsigned SubAction : 8; /// sub-action of unit
 	public float waitTime;          /// action counter
@@ -132,21 +132,21 @@ public class Unit
 
     int OrderCount;            /// how many orders in queue
 	char OrderFlush;            /// cancel current order, take next
-	public List<Order> orders; /// orders to process
+	public List<Order> orders=new List<Order>(); /// orders to process
         /**  This order is executed, if the current order is finished.
 ** This is used for attacking units, to return to the old
 ** place or for patrolling units to return to patrol after
 ** killing some enemies.Any new order given to the unit,
 **  clears this saved order.*/
-    Order savedOrder;           /// order to continue after current
-	Order newOrder;             /// order for new trained units
-	Order criticalOrder;        /// order to do as possible in breakable animation.
+    Order savedOrder=new Order();           /// order to continue after current
+	Order newOrder= new Order();             /// order for new trained units
+	Order criticalOrder= new Order();        /// order to do as possible in breakable animation.
     //char* AutoCastSpell;        /// spells to auto cast
     //unsigned AutoRepair : 1;    /// True if unit tries to repair on still action.
     public int frameNum;
     public UnitDirection direction;
     public SpriteDrawer spriteDrawer;
-    public void init(UnitType type)
+    public void init(UnitType type,SpriteDrawer drawer)
     {
  
        GameManager. unitManager.addUnit(this);
@@ -156,8 +156,11 @@ public class Unit
         unitType = type;
 
         seen.Frame = UnitNotSeen; // Unit isn't yet seen
-
-       // Frame = type->StillFrame;
+        spriteDrawer = drawer;
+        drawer.unit = this;
+        drawer.m_transform = drawer.transform;
+        drawer.m_spriteRenderer = drawer.GetComponent<SpriteRenderer>();
+        // Frame = type->StillFrame;
 
         //if (UnitManager.unitTypeVar.NumberVariable)
         //{

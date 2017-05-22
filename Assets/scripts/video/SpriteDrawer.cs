@@ -7,8 +7,7 @@ public class SpriteDrawer : MonoBehaviour {
     public Transform m_transform;
 	// Use this for initialization
 	void Start () {
-        m_transform = transform;
-        m_spriteRenderer = GetComponent<SpriteRenderer>();
+       
     }
 	
 	// Update is called once per frame
@@ -42,6 +41,7 @@ public class SpriteDrawer : MonoBehaviour {
             }
         }
         List<Sprite> frames = sprite[direction];
+
         if (frameNum >= frames.Count) {
             frameNum = 0;
         }

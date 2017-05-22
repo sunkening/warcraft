@@ -26,7 +26,7 @@ public class Global
 #elif UNITY_IOS
        PlatformType=UNITY_IOS;  
 #endif
-        Debug.Log(PlatformType);
+ 
         //PlatformType = UNITY_ANDROID;
     }
 }
