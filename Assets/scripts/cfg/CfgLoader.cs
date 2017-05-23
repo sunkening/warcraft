@@ -36,12 +36,12 @@ public class CfgLoader  {
         yield return ResourceLoader.LoadAssetAsync(task);
         AudioCfg.load((task.asset as TextAsset).bytes);
 
-        task.name = "spriteAnim.csv";
+        task.name = "frameAnimation.csv";
         yield return ResourceLoader.LoadAssetAsync(task);
-        SpriteAnimCfg.load((task.asset as TextAsset).bytes);
-        task.name = "sprite.csv";
+        FrameAnimationCfg.load((task.asset as TextAsset).bytes);
+        task.name = "characterSprite.csv";
         yield return ResourceLoader.LoadAssetAsync(task);
-        SpriteCfg.load((task.asset as TextAsset).bytes);
+        CharacterSpriteCfg.load((task.asset as TextAsset).bytes);
         task.name = "unitType.csv";
         yield return ResourceLoader.LoadAssetAsync(task);
         UnitTypeCfg.load((task.asset as TextAsset).bytes);

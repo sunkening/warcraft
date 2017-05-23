@@ -27,8 +27,11 @@ public class UnitManager   {
         AllUnits[NumUnits] = u;
         NumUnits++;
     }
-    Dictionary<int, List<Sprite>> id2SpriteAnim = new Dictionary<int, List<Sprite>>();
+    //只保存所有unit用到的，不会加载frameAnimationCfg所有数据
+    Dictionary<int, FrameAnimation> id2FrameAnimation = new Dictionary<int, FrameAnimation>();
     Dictionary<int, CharacterSprite> id2CharacterSprite = new Dictionary<int, CharacterSprite>();
+
+    //加载所有的unitTypeCfg数据
     public Dictionary<int, UnitType> id2UnitType = new Dictionary<int, UnitType>();
     public GameObject characrerDrawerPrefab;
     
@@ -64,7 +67,7 @@ public class UnitManager   {
         
         if (!id2CharacterSprite.ContainsKey(spriteCfgId))
         {
-            SpriteCfg spriteCfg = SpriteCfg.get(spriteCfgId);
+            CharacterSpriteCfg spriteCfg = CharacterSpriteCfg.get(spriteCfgId);
             CharacterSprite sprite = new CharacterSprite();
             
             for (int i=0;i<8;i++  )
@@ -76,9 +79,9 @@ public class UnitManager   {
                     sprite.runAnim[i] = null;
                     continue;
                 }
-                if (!id2SpriteAnim.ContainsKey(spriteAnimId))
+                if (!id2FrameAnimation.ContainsKey(spriteAnimId))
                 {
-                    SpriteAnimCfg spriteAnimCfg = SpriteAnimCfg.get(spriteAnimId);
+                    FrameAnimationCfg spriteAnimCfg = FrameAnimationCfg.get(spriteAnimId);
                     List<Sprite> anim = new List<Sprite>();
                     ResourceLoadTaskGroup group = new ResourceLoadTaskGroup();
                     for (int j= spriteAnimCfg.nBegin;j<= spriteAnimCfg.nEnd;j++)
@@ -101,11 +104,14 @@ public class UnitManager   {
 
                         anim.Add(s);
                     }
-                    id2SpriteAnim[spriteAnimId] = anim;
+                    FrameAnimation frameanimation = new FrameAnimation();
+                    frameanimation.frames = anim;
+
+                    id2FrameAnimation[spriteAnimId] = anim;
 
                 }
                 
-                sprite.runAnim[i] = id2SpriteAnim[spriteAnimId];
+                sprite.runAnim[i] = id2FrameAnimation[spriteAnimId];
                 
             }
             id2CharacterSprite[spriteCfgId] = sprite;
