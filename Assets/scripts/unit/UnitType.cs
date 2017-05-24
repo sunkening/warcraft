@@ -21,9 +21,9 @@ public class UnitType
     int[] CanStore=new int[(int)ResourceType.MaxCosts];             /// Resources that we can store here.
 	int GivesResource;                  /// The resource this unit gives.
 	public ResourceInfo[] ResInfo=new ResourceInfo[(int)ResourceType.MaxCosts];    /// Resource information.
-	//std::vector<CBuildRestriction*> BuildingRules;   /// Rules list for building a building.
-	//SDL_Color NeutralMinimapColorRGB;   /// Minimap Color for Neutral Units.
-
+    //std::vector<CBuildRestriction*> BuildingRules;   /// Rules list for building a building.
+    //SDL_Color NeutralMinimapColorRGB;   /// Minimap Color for Neutral Units.
+    public bool isVanishes;/// Corpes & destroyed places
 
     public int icon;
     public int Animations;

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterSprite 
+public class CharacterSprite
 {
-    public FrameAnimation[] runAnim = new FrameAnimation[(int)UnitDirection.Total];
+    public CharacterAnimation[]  animations = new CharacterAnimation[(int)UnitAnimation.Total];
+    public int frameRate;
 }

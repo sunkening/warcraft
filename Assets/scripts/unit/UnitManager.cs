@@ -69,14 +69,14 @@ public class UnitManager   {
         {
             CharacterSpriteCfg spriteCfg = CharacterSpriteCfg.get(spriteCfgId);
             CharacterSprite sprite = new CharacterSprite();
-            
+            sprite.animations[(int)UnitAnimation.Run] = new CharacterAnimation();
             for (int i=0;i<8;i++  )
             {
                 int spriteAnimId = spriteCfg.runAnim[i];
 
                 if (spriteAnimId==0)
                 {
-                    sprite.runAnim[i] = null;
+                    sprite.animations[(int)UnitAnimation.Run].anim[i] = null;
                     continue;
                 }
                 if (!id2FrameAnimation.ContainsKey(spriteAnimId))
@@ -106,14 +106,14 @@ public class UnitManager   {
                     }
                     FrameAnimation frameanimation = new FrameAnimation();
                     frameanimation.frames = anim;
-
-                    id2FrameAnimation[spriteAnimId] = anim;
-
+                    frameanimation.frameRate = spriteAnimCfg.frameRate;
+                    id2FrameAnimation[spriteAnimId] = frameanimation;
                 }
-                
-                sprite.runAnim[i] = id2FrameAnimation[spriteAnimId];
+
+                sprite.animations[(int)UnitAnimation.Run].anim[i] = id2FrameAnimation[spriteAnimId].frames;
                 
             }
+            sprite.frameRate = spriteCfg.frameRate;
             id2CharacterSprite[spriteCfgId] = sprite;
         }
         UnitType unitType = new UnitType();

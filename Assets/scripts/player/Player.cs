@@ -30,19 +30,19 @@ public class Player   {
     int AiEnabled;       /// handle AI on local computer
 	//PlayerAi* Ai;          /// Ai structure pointer
 
-  //  CUnit* Units[UnitMax]; /// units of this player
-	int TotalNumUnits;  /// total # units for units' list
-	int NumBuildings;   /// # buildings
-	int Supply;         /// supply available/produced
-	int Demand;         /// demand of player
+    public  Unit[] units=new Unit[Consts.UnitMax]; /// units of this player
+	public int NumUnits;  /// total # units for units' list
+	public int NumBuildings;   /// # buildings
+	public int Supply;         /// supply available/produced
+	public int Demand;         /// demand of player
 
     int UnitLimit;       /// # food units allowed
 	int BuildingLimit;   /// # buildings allowed
 	int TotalUnitLimit;  /// # total unit number allowed
 
     int Score;           /// Points for killing ...
-	int TotalUnits;
-    int TotalBuildings;
+	public int TotalUnitsMade;//生产过的总数
+    public int TotalBuildingsMade;
     //int TotalResources[ResourceType.MaxCosts];
     int TotalRazings;
     int TotalKills;      /// How many unit killed

@@ -8,6 +8,14 @@ public enum UnitState
     Built,
     Upgrade,
 }
+public enum UnitAnimation
+{
+    Idle,
+    Run,
+    Attack,
+    Die,
+    Total,
+}
 public enum UnitAction
 {
     UnitActionNone,         /// No valid action
@@ -91,6 +99,8 @@ public class Unit
 
     public UnitType unitType;              /// Pointer to unit-type (peon,...)
 	public Player  Player;            /// Owner of this unit
+    public int playerUnitsIndex;  ///  在player.units数组中的索引，用于快速从units中删除
+ 
     public Player rescuedFrom;        /// The original owner of a rescued unit.
 	UnitStats Stats;             /// Current unit stats
 	int CurrentSightRange; /// Unit's Current Sight Range
@@ -144,8 +154,13 @@ public class Unit
     //char* AutoCastSpell;        /// spells to auto cast
     //unsigned AutoRepair : 1;    /// True if unit tries to repair on still action.
     public int frameNum;
+    public int faceAngle ;//0-359
     public UnitDirection direction;
     public SpriteDrawer spriteDrawer;
+    public float moveSpeed=1;
+    public float animationSpeed=1;
+    public float lastFrameChangeTime ;
+    public UnitAnimation unitAnimation=UnitAnimation.Run;
     public void init(UnitType type,SpriteDrawer drawer)
     {
  
@@ -246,6 +261,61 @@ public class Unit
         //unit->Container = NoUnitP;
     }
     /**
+**  Assigns a unit to a player, adjusting buildings, food and totals
+**
+**  @param player  player which have the unit.
+*/
+    public void assignToPlayer(Player player)
+    {
+        UnitType type;  // type of unit.
+
+        //Assert(player);
+        type = unitType;
+
+        //
+        // Build player unit table
+        //
+        if (!type.isVanishes && orders[0].action !=UnitAction.UnitActionDie)
+        {
+            playerUnitsIndex =  player.NumUnits++;
+           
+                // If unit is dieing, it's already been lost by all players
+                // don't count again
+                if (type.isBuilding)
+                {
+                   
+                    player.TotalBuildingsMade++;
+
+                }
+                else
+                {
+                    player.TotalUnitsMade++;
+                }
+            player->UnitTypesCount[type->Slot]++;
+            player->Demand += type->Demand; // food needed
+        }
+
+
+        // Don't Add the building if it's dieing, used to load a save game
+        if (type.isBuilding && orders[0].action != UnitAction.UnitActionDie)
+        {
+           player.NumBuildings++;
+        }
+        Player = player;
+        Stats = &type->Stats[Player->Index];
+        Colors = &player->UnitColors;
+        if (!SaveGameLoading)
+        {
+            if (UnitTypeVar.NumberVariable)
+            {
+                Assert(Variable);
+                Assert(Stats->Variables);
+                memcpy(Variable, Stats->Variables,
+                    UnitTypeVar.NumberVariable * sizeof(*Variable));
+            }
+        }
+    }
+    /**
 **  Add unit to a container. It only updates linked list stuff.
 **
 **  @param host  Pointer to container.
@@ -272,6 +342,21 @@ public class Unit
     {
         return true;
     }
+    public void changeDirection(UnitDirection d)
+    {
+        if (direction == d)
+        {
+            return;
+        }
+        direction = d;
+        frameNum = 0;
+        lastFrameChangeTime = Time.realtimeSinceStartup;
+    }
+    public void changeCharacrerAnimation()
+    {
+
+    }
+
     public void draw()
     {
         float x;
@@ -279,7 +364,7 @@ public class Unit
         int frame;
         UnitState state;
         bool constructed;
-       CharacterSprite sprite;
+        CharacterSprite sprite = unitType.sprite;  
         ResourceInfo resinfo;
        // CConstructionFrame* cframe;
         UnitType type;
@@ -291,11 +376,12 @@ public class Unit
 
         // Those should have been filtered. Check doesn't make sense with ReplayRevealMap
         //Assert(ReplayRevealMap || this->Type->VisibleUnderFog || this->IsVisible(ThisPlayer));
-
+        
         if (MapManager.isReveal || isVisible(PlayerManager.thisPlayer))
         {
             type = unitType;
-            frame = this.frameNum;
+            
+            
             y = worldy;
             x = worldx;
             //x += CurrentViewport->Map2ViewportX(this->X);
@@ -317,8 +403,40 @@ public class Unit
             {
                 state = UnitState.None;
             }
+            int frameRate = type.sprite.frameRate;
+            if (type.isHarvester && this.currentResourceType > 0)
+            {
+                resinfo = type.ResInfo[(int)this.currentResourceType];
+                if (this.resourcesHeld > 0)
+                {
+                    if (resinfo.spriteWhenLoaded != null)
+                    {
+                        sprite = resinfo.spriteWhenLoaded;
+                        frameRate = sprite.frameRate;
+                    }
+                }
+                else
+                {
+                    if (resinfo.spriteWhenEmpty != null)
+                    {
+                        sprite = resinfo.spriteWhenEmpty;
+                        frameRate = sprite.frameRate;
+                    }
+                }
+            }
+            
+            if (Time.realtimeSinceStartup-lastFrameChangeTime>=1/ frameRate)
+            {
+                frameNum++;
+                lastFrameChangeTime = Time.realtimeSinceStartup;
+                if (frameNum>sprite.animations[(int)unitAnimation].anim[(int)direction].Count)
+                {
+                    frameNum = 0;
+                }
+            }
+            frame = this.frameNum;
             // This is trash unless the unit is being built, and that's when we use it.
-          //  cframe = this->Data.Built.Frame;
+            //  cframe = this->Data.Built.Frame;
         }
         else
         {
@@ -331,13 +449,13 @@ public class Unit
             state = this.seen.state;
            // cframe = this.seen.CFrame;
         }
-
-//# ifdef DYNAMIC_LOAD
-//        if (!type->Sprite)
-//        {
-//            LoadUnitTypeSprite(type);
-//        }
-//#endif
+        
+        //# ifdef DYNAMIC_LOAD
+        //        if (!type->Sprite)
+        //        {
+        //            LoadUnitTypeSprite(type);
+        //        }
+        //#endif
 
         if (!isVisible(PlayerManager.thisPlayer) && frame == UnitNotSeen)
         {
@@ -365,26 +483,9 @@ public class Unit
         //
         // Adjust sprite for Harvesters.
         //
-        sprite = type.sprite;
-        if (type.isHarvester && this.currentResourceType > 0)
-        {
-            resinfo = type.ResInfo[(int)this.currentResourceType];
-            if (this.resourcesHeld>0)
-            {
-                if (resinfo.spriteWhenLoaded!=null)
-                {
-                    sprite = resinfo.spriteWhenLoaded;
-                }
-            }
-            else
-            {
-                if (resinfo.spriteWhenEmpty!=null)
-                {
-                    sprite = resinfo.spriteWhenEmpty;
-                }
-            }
-        }
-
+       
+        
+        
         //
         // Now draw!
         // Buildings under construction/upgrade/ready.
@@ -410,7 +511,9 @@ public class Unit
         }
         else
         {
-            this.spriteDrawer.drawUnitType(sprite.runAnim, this.Player.Index, frame);
+            Debug.Log(this.Player.Index);
+ 
+            this.spriteDrawer.drawUnitType(sprite.animations[(int)unitAnimation].anim , this.Player.Index, frame);
             //DrawUnitType(type, sprite,
             //    this.RescuedFrom ? this->RescuedFrom->Index : this->Player->Index,
             //    frame, x, y);

@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour {
         print("Global finish");
     }
 
-    
+    Unit unit = new Unit();
     // Use this for initialization
     IEnumerator Start ()
     {
@@ -49,20 +49,25 @@ public class GameManager : MonoBehaviour {
         
         GameObject d=GameObject.Instantiate(unitManager.characrerDrawerPrefab);
         SpriteDrawer drawer=d.AddComponent<SpriteDrawer>();
-        Unit unit = new Unit();
+        Debug.Log (drawer);
+        Debug.Log("************************");
         unit.init(unitManager.id2UnitType[1],drawer);
         unit.direction = UnitDirection.LookingNE;
         //foreach ( Sprite  l in unit.unitType.sprite.runAnim[1])
         //{
         //    Debug.Log(l);
         //}
-        unit.spriteDrawer.drawUnitType(unit.unitType.sprite.runAnim, 0, 1);
+         
     }
 	
 	// Update is called once per frame
 	void Update () {
-		
-	}
+        if (unit.unitType!=null)
+        {
+            unit.draw();
+        }
+       
+    }
     void OnGUI()
     {
         if (GUILayout.Button("Press Me"))

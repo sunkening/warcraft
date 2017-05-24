@@ -1,0 +1,6 @@
+id,名称,是否包含多个帧,帧率,一个unity单位多少像素,资源路径,资源名称,开始序号,结束序号,宽,高,行，第一行1
+id,name,isMultiple,frameRate,fixelsPerUnit,resourcePath,resourceName,nBegin,nEnd,frameWidth,frameHeight,row
+int,string,bool,int,int,string,string,int,int,int,int,int
+1,archerRunNE,FALSE,1,66,characters,,17,24,,,
+2,archerRunE,FALSE,1,66,characters,,9,16,,,
+3,archerRunSE,FALSE,1,66,characters,,1,8,,,

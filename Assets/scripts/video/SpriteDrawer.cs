@@ -15,6 +15,8 @@ public class SpriteDrawer : MonoBehaviour {
 		
 	}
     public Unit unit;
+    public int curFrame;
+    public FrameAnimation frameAnimation;
     /**
 **  Draw unit-type on map.
 **
