@@ -121,11 +121,20 @@ public class Unit
     public bool constructed  ;    /// Unit is in construction 用于建筑，正在建造
 	public bool Active  ;         /// Unit is active for AI
 	public bool Boarded ;        /// Unit is on board a transporter.
-	
-                                /// NULL if the unit was not rescued.
+
+    // @note int is faster than shorts
+    public int Refs;         /// Reference counter
+	public  int slotIndex;         /// Assigned slot number
+	//CUnit** UnitSlot;     /// Slot pointer of Units
+    public int unitIndex;
+	//CUnit** PlayerSlot;   /// Slot pointer of Player->Units
+
+    public Unit Next;          /// Generic link pointer (on map)
+	public bool  CacheLock  ; /// Used to lock unit out of the cache.
+                            /// NULL if the unit was not rescued.
     /* Seen stuff. */
     //int VisCount[PlayerMax];     /// Unit visibility counts
-	public SeenStuff seen=new SeenStuff();
+    public SeenStuff seen=new SeenStuff();
 
     //unsigned SubAction : 8; /// sub-action of unit
 	public float waitTime;          /// action counter
@@ -232,6 +241,35 @@ public class Unit
     {
 
     }
+ 
+    /**
+**  Remove unit from a container. It only updates linked list stuff.
+**
+**  @param unit    Pointer to unit.
+*/
+    public void removeFromContainer( )
+    {
+        Unit host;  // transporter which contain unit.
+
+        host = this.Container;
+        //Assert(unit->Container);
+       // Assert(unit->Container->InsideCount > 0);
+        host.insideUnitCount--;
+        this.NextContained.PrevContained = this.PrevContained;
+        this.PrevContained.NextContained = this.NextContained;
+        if (host.insideUnitCount == 0)
+        {
+            host.UnitInside = null;
+        }
+        else
+        {
+            if (host.UnitInside == this)
+            {
+                host.UnitInside = NextContained;
+            }
+        }
+        Container = null;
+    }
     /**
     **  Remove unit from a container. It only updates linked list stuff.
     **
@@ -279,20 +317,18 @@ public class Unit
         {
             playerUnitsIndex =  player.NumUnits++;
            
-                // If unit is dieing, it's already been lost by all players
-                // don't count again
-                if (type.isBuilding)
-                {
-                   
-                    player.TotalBuildingsMade++;
-
-                }
-                else
-                {
-                    player.TotalUnitsMade++;
-                }
-            player->UnitTypesCount[type->Slot]++;
-            player->Demand += type->Demand; // food needed
+            // If unit is dieing, it's already been lost by all players
+            // don't count again
+            if (type.isBuilding)
+            { 
+                player.TotalBuildingsMade++;
+            }
+            else
+            {
+                player.TotalUnitsMade++;
+            }
+           // player->UnitTypesCount[type->Slot]++;
+            player.unitSpaceUsed += type.unitSpaceNeeded; // food needed
         }
 
 
@@ -302,18 +338,18 @@ public class Unit
            player.NumBuildings++;
         }
         Player = player;
-        Stats = &type->Stats[Player->Index];
-        Colors = &player->UnitColors;
-        if (!SaveGameLoading)
-        {
-            if (UnitTypeVar.NumberVariable)
-            {
-                Assert(Variable);
-                Assert(Stats->Variables);
-                memcpy(Variable, Stats->Variables,
-                    UnitTypeVar.NumberVariable * sizeof(*Variable));
-            }
-        }
+        Stats = type.stats[Player.Index];
+      //  Colors = player->UnitColors;
+        //if (!SaveGameLoading)
+        //{
+        //    if (UnitTypeVar.NumberVariable)
+        //    {
+        //        Assert(Variable);
+        //        Assert(Stats->Variables);
+        //        memcpy(Variable, Stats->Variables,
+        //            UnitTypeVar.NumberVariable * sizeof(*Variable));
+        //    }
+        //}
     }
     /**
 **  Add unit to a container. It only updates linked list stuff.
@@ -403,7 +439,7 @@ public class Unit
             {
                 state = UnitState.None;
             }
-            int frameRate = type.sprite.frameRate;
+            float frameRate = type.sprite.frameRate;
             if (type.isHarvester && this.currentResourceType > 0)
             {
                 resinfo = type.ResInfo[(int)this.currentResourceType];
@@ -427,13 +463,16 @@ public class Unit
             
             if (Time.realtimeSinceStartup-lastFrameChangeTime>=1/ frameRate)
             {
+                
                 frameNum++;
                 lastFrameChangeTime = Time.realtimeSinceStartup;
-                if (frameNum>sprite.animations[(int)unitAnimation].anim[(int)direction].Count)
+                if (frameNum>=sprite.animations[(int)unitAnimation].anim[(int)direction].Count)
                 {
                     frameNum = 0;
                 }
+                 
             }
+            
             frame = this.frameNum;
             // This is trash unless the unit is being built, and that's when we use it.
             //  cframe = this->Data.Built.Frame;
@@ -511,8 +550,6 @@ public class Unit
         }
         else
         {
-            Debug.Log(this.Player.Index);
- 
             this.spriteDrawer.drawUnitType(sprite.animations[(int)unitAnimation].anim , this.Player.Index, frame);
             //DrawUnitType(type, sprite,
             //    this.RescuedFrom ? this->RescuedFrom->Index : this->Player->Index,

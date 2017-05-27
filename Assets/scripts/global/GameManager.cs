@@ -6,12 +6,21 @@ using UnityEngine.UI;
 using cfg;
 public class GameManager : MonoBehaviour {
     public bool inited;
+    /*============================================================================
+==  DISPLAY
+============================================================================*/
+
+    public static int GameCycle;             /// Game simulation cycle counter
+    public static int FastForwardCycle;      /// Cycle to fastforward to in a replay
+    public static UnitManager unitManager = new UnitManager();
+
+
     public float progress;
     public int x;
     public int y;
     public int id;
     public CameraCotroller cameraCotroller;
-    public static UnitManager unitManager = new UnitManager();
+    
     public SpriteRenderer spriteRenderer;
     void Awake()
     {
@@ -47,17 +56,15 @@ public class GameManager : MonoBehaviour {
         LoaderResult r = new LoaderResult();
         yield return unitManager.loadUnitType(1, r);
         
-        GameObject d=GameObject.Instantiate(unitManager.characrerDrawerPrefab);
-        SpriteDrawer drawer=d.AddComponent<SpriteDrawer>();
-        Debug.Log (drawer);
-        Debug.Log("************************");
-        unit.init(unitManager.id2UnitType[1],drawer);
-        unit.direction = UnitDirection.LookingNE;
+ 
+        Player p = new Player();
+        unit=unitManager.createUnit(unitManager.id2UnitType[1],p);
+        unit.direction = UnitDirection.LookingE;
         //foreach ( Sprite  l in unit.unitType.sprite.runAnim[1])
         //{
         //    Debug.Log(l);
         //}
-         
+
     }
 	
 	// Update is called once per frame

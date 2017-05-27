@@ -24,9 +24,13 @@ public class UnitType
     //std::vector<CBuildRestriction*> BuildingRules;   /// Rules list for building a building.
     //SDL_Color NeutralMinimapColorRGB;   /// Minimap Color for Neutral Units.
     public bool isVanishes;/// Corpes & destroyed places
+    public int unitSpaceNeeded;
+    public UnitStats[] stats = new UnitStats[Consts.PlayerMax];
+
+
 
     public int icon;
     public int Animations;
- 
+    
 
 }

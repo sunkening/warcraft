@@ -1,4 +1,4 @@
 id,名称,帧率,行走动画,站立动画1,站立动画2,攻击动画,死亡动画
 id,name,frameRate,runAnim,idleAnim1,idleAnim2,attackAnim,dieAnim
-int,string,int,List<int>,List<int>,List<int>,List<int>,int
-1,archer,4,0|1|2|3|0|0|0|0,,,,
+int,string,float,List<int>,List<int>,List<int>,List<int>,int
+1,archer,12,0|1|2|3|0|0|0|0,,,,

@@ -6,7 +6,7 @@ public class Player   {
     public int Index;        /// player as number
 	string Name;   /// name of non computer
 
-    int Type;         /// type of player (human,computer,...)
+    public int Type;         /// type of player (human,computer,...)
 	int Race;         /// race of player (orc,human,...)
 	string AiName; /// AI for computer
 
@@ -34,7 +34,7 @@ public class Player   {
 	public int NumUnits;  /// total # units for units' list
 	public int NumBuildings;   /// # buildings
 	public int Supply;         /// supply available/produced
-	public int Demand;         /// demand of player
+	public int unitSpaceUsed;         /// demand of player当前已经使用的人口空间
 
     int UnitLimit;       /// # food units allowed
 	int BuildingLimit;   /// # buildings allowed

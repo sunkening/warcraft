@@ -5,5 +5,5 @@ using UnityEngine;
 public class CharacterSprite
 {
     public CharacterAnimation[]  animations = new CharacterAnimation[(int)UnitAnimation.Total];
-    public int frameRate;
+    public float frameRate;
 }

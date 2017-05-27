@@ -7,7 +7,7 @@ namespace  cfg
     {
     	public int id;
     	public string name;
-    	public int frameRate;
+    	public float frameRate;
     	public List<int> runAnim;
     	public List<int> idleAnim1;
     	public List<int> idleAnim2;
