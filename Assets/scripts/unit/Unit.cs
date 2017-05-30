@@ -413,7 +413,7 @@ public class Unit
         // Those should have been filtered. Check doesn't make sense with ReplayRevealMap
         //Assert(ReplayRevealMap || this->Type->VisibleUnderFog || this->IsVisible(ThisPlayer));
         
-        if (MapManager.isReveal || isVisible(PlayerManager.thisPlayer))
+        if (MapManager.isReveal || isVisible(GameManager.playerManager.thisPlayer))
         {
             type = unitType;
             
@@ -496,7 +496,7 @@ public class Unit
         //        }
         //#endif
 
-        if (!isVisible(PlayerManager.thisPlayer) && frame == UnitNotSeen)
+        if (!isVisible(GameManager.playerManager.thisPlayer) && frame == UnitNotSeen)
         {
             //DebugPrint("FIXME: Something is wrong, unit %d not seen but drawn time %lu?.\n" _C_
             //    this->Slot _C_ GameCycle);

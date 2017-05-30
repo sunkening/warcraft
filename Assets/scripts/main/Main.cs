@@ -1,27 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
- 
-using cfg;
-public class GameManager : MonoBehaviour {
-    public bool inited;
-    /*============================================================================
-==  DISPLAY
-============================================================================*/
 
-    public static int GameCycle;             /// Game simulation cycle counter
-    public static int FastForwardCycle;      /// Cycle to fastforward to in a replay
+public class Main : MonoBehaviour {
     public static UnitManager unitManager = new UnitManager();
+    public static PlayerManager playerManager = new PlayerManager();
+    public static MapManager mapManager = new MapManager();
+    public static NetManager netManager = new NetManager();
 
-
-    public float progress;
-    public int x;
-    public int y;
-    public int id;
     public CameraCotroller cameraCotroller;
-    
+
     public SpriteRenderer spriteRenderer;
+
+
+    Unit unit = new Unit();
     void Awake()
     {
         ResourceLoader.init();
@@ -29,17 +21,14 @@ public class GameManager : MonoBehaviour {
         Global.Instance.Init();
         print("Global finish");
     }
-
-    Unit unit = new Unit();
-    // Use this for initialization
-    IEnumerator Start ()
+    IEnumerator Start()
     {
         yield return CfgLoader.Load();
         print("CfgLoader finish");
         yield return Map.Instance.load();
         print("map finish");
-        Map.Instance.createMap(32,32,1);
-        cameraCotroller=Camera.main.transform.parent.GetComponent<CameraCotroller>();
+        Map.Instance.createMap(32, 32, 1);
+        cameraCotroller = Camera.main.transform.parent.GetComponent<CameraCotroller>();
         cameraCotroller.init(Map.Instance);
         //SpriteAnimCfg sfg=SpriteAnimCfg.get(1);
         //Object o=Resources.Load("characters/1.0");
@@ -52,13 +41,13 @@ public class GameManager : MonoBehaviour {
         //task.name = "1.0.png";
         //yield return ResourceLoader.LoadAssetAsync(task);
         //print(task.asset);
-        yield return unitManager.init( );
+        yield return unitManager.init();
         LoaderResult r = new LoaderResult();
         yield return unitManager.loadUnitType(1, r);
-        
- 
+
+
         Player p = new Player();
-        unit=unitManager.createUnit(unitManager.id2UnitType[1],p);
+        unit = unitManager.createUnit(unitManager.id2UnitType[1], p);
         unit.direction = UnitDirection.LookingE;
         //foreach ( Sprite  l in unit.unitType.sprite.runAnim[1])
         //{
@@ -66,18 +55,19 @@ public class GameManager : MonoBehaviour {
         //}
 
     }
-	
-	// Update is called once per frame
-	void Update () {
-        if (unit.unitType!=null)
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (unit.unitType != null)
         {
             unit.draw();
         }
-       
+
     }
     void OnGUI()
     {
         if (GUILayout.Button("Press Me"))
-            Map.Instance.setTile(x,y,id);
+            Map.Instance.setTile(x, y, id);
     }
 }

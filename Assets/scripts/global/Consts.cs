@@ -11,5 +11,8 @@ public class Consts
     public const int UnitMax    =  2048 ;              /// How many units supported
     public const int MAX_UNIT_SLOTS =65535;
     public const int NetworkMaxLag = 250;
+
+
+    public const int NetworkDefaultPort = 6660; /// Default communication port
     //public const int MAX_UNIT_NUM = 65535;
 }

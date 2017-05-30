@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MapManager   {
     public static bool isReveal;
+    public Map curMap;
     public void init()
     {
         
