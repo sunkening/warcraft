@@ -1,15 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-public enum PlayerType
-{
-    PlayerNeutral = 2,        /// neutral
-	PlayerNobody = 3,        /// unused slot
-	PlayerComputer = 4,       /// computer player
-	PlayerPerson = 5,         /// human player
-	PlayerRescuePassive = 6,  /// rescued passive
-	PlayerRescueActive = 7,   /// rescued  active
-};
+
 public class PlayerManager   {
     public Player thisPlayer;
     public Player[] players = new Player[Consts.PlayerMax];
@@ -83,158 +75,89 @@ public class PlayerManager   {
         //
         if (type == (int)PlayerType.PlayerPerson && Main.netManager.NetPlayers==0)
         {
-            if (!ThisPlayer)
+            if (thisPlayer==null)
             {
-                ThisPlayer = player;
+                thisPlayer = player;
             }
             else
             {
-                type = PlayerComputer;
+                type =(int) PlayerType.PlayerComputer;
             }
         }
-        if (NetPlayers && NumPlayers == NetLocalPlayerNumber)
-        {
-            ThisPlayer = &Players[NetLocalPlayerNumber];
-        }
+        //if (Main.netManager.NetPlayers>0 && NumPlayers == NetLocalPlayerNumber)
+        //{
+        //    ThisPlayer = &Players[NetLocalPlayerNumber];
+        //}
 
-        if (NumPlayers == PlayerMax)
+        if (NumPlayers == Consts.PlayerMax)
         {
-            static int already_warned;
-
-            if (!already_warned)
-            {
-                DebugPrint("Too many players\n");
-                already_warned = 1;
-            }
+            Debug.LogError("Too many players");
             return;
         }
-
         //
         //  Make simple teams:
         //  All person players are enemies.
         //
-        switch (type)
+        switch ((PlayerType)type)
         {
-            case PlayerNeutral:
-            case PlayerNobody:
+            case PlayerType.PlayerNeutral:
+            case PlayerType.PlayerNobody:
             default:
                 team = 0;
-                player->SetName("Neutral");
+                player.Name=  "Neutral";
                 break;
-            case PlayerComputer:
+            case PlayerType.PlayerComputer:
                 team = 1;
-                player->SetName("Computer");
+                player.Name = "Computer";
                 break;
-            case PlayerPerson:
+            case PlayerType.PlayerPerson:
                 team = 2 + NumPlayers;
-                player->SetName("Person");
+                player.Name = "Person";
                 break;
-            case PlayerRescuePassive:
-            case PlayerRescueActive:
+            case PlayerType.PlayerRescuePassive:
+            case PlayerType.PlayerRescueActive:
                 // FIXME: correct for multiplayer games?
-                player->SetName("Computer");
+                player.Name = "Computer";
                 team = 2 + NumPlayers;
                 break;
         }
-        DebugPrint("CreatePlayer name %s\n" _C_ player->Name.c_str());
+        //DebugPrint("CreatePlayer name %s\n" _C_ player->Name.c_str());
 
-        player->Type = type;
-        player->Race = 0;
-        player->Team = team;
-        player->Enemy = 0;
-        player->Allied = 0;
-        player->AiName = "ai-passive";
+        player.Type = type;
+        player.Race = 0;
+        player.Team = team;
+        //player.Enemy = 0;
+       // player.Allied = 0;
+       // player.AiName = "ai-passive";
 
-        //
-        //  Calculate enemy/allied mask.
-        //
-        for (i = 0; i < NumPlayers; ++i)
-        {
-            switch (type)
-            {
-                case PlayerNeutral:
-                case PlayerNobody:
-                default:
-                    break;
-                case PlayerComputer:
-                    // Computer allied with computer and enemy of all persons.
-                    if (Players[i].Type == PlayerComputer)
-                    {
-                        player->Allied |= (1 << i);
-                        Players[i].Allied |= (1 << NumPlayers);
-                    }
-                    else if (Players[i].Type == PlayerPerson ||
-                          Players[i].Type == PlayerRescueActive)
-                    {
-                        player->Enemy |= (1 << i);
-                        Players[i].Enemy |= (1 << NumPlayers);
-                    }
-                    break;
-                case PlayerPerson:
-                    // Humans are enemy of all?
-                    if (Players[i].Type == PlayerComputer ||
-                            Players[i].Type == PlayerPerson)
-                    {
-                        player->Enemy |= (1 << i);
-                        Players[i].Enemy |= (1 << NumPlayers);
-                    }
-                    else if (Players[i].Type == PlayerRescueActive ||
-                          Players[i].Type == PlayerRescuePassive)
-                    {
-                        player->Allied |= (1 << i);
-                        Players[i].Allied |= (1 << NumPlayers);
-                    }
-                    break;
-                case PlayerRescuePassive:
-                    // Rescue passive are allied with persons
-                    if (Players[i].Type == PlayerPerson)
-                    {
-                        player->Allied |= (1 << i);
-                        Players[i].Allied |= (1 << NumPlayers);
-                    }
-                    break;
-                case PlayerRescueActive:
-                    // Rescue active are allied with persons and enemies of computer
-                    if (Players[i].Type == PlayerComputer)
-                    {
-                        player->Enemy |= (1 << i);
-                        Players[i].Enemy |= (1 << NumPlayers);
-                    }
-                    else if (Players[i].Type == PlayerPerson)
-                    {
-                        player->Allied |= (1 << i);
-                        Players[i].Allied |= (1 << NumPlayers);
-                    }
-                    break;
-            }
-        }
+ 
 
         //
         //  Initial default incomes.
         //
-        for (i = 0; i < MaxCosts; ++i)
+        //for (i = 0; i < MaxCosts; ++i)
+        //{
+        //    player->Incomes[i] = DefaultIncomes[i];
+        //}
+
+        //memset(player->UnitTypesCount, 0, sizeof(player->UnitTypesCount));
+
+        player.Supply = 0;
+        player.unitSpaceUsed = 0;
+        player.NumBuildings = 0;
+        player.NumUnits = 0;
+        player.Score = 0;
+
+       // player.color = PlayerColors[NumPlayers][0];
+
+        if (player.Type == (int)PlayerType.PlayerComputer ||
+                player.Type == (int)PlayerType.PlayerRescueActive)
         {
-            player->Incomes[i] = DefaultIncomes[i];
-        }
-
-        memset(player->UnitTypesCount, 0, sizeof(player->UnitTypesCount));
-
-        player->Supply = 0;
-        player->Demand = 0;
-        player->NumBuildings = 0;
-        player->TotalNumUnits = 0;
-        player->Score = 0;
-
-        player->Color = PlayerColors[NumPlayers][0];
-
-        if (Players[NumPlayers].Type == PlayerComputer ||
-                Players[NumPlayers].Type == PlayerRescueActive)
-        {
-            player->AiEnabled = 1;
+            player.AiEnabled = true;
         }
         else
         {
-            player->AiEnabled = 0;
+            player.AiEnabled = false;
         }
 
         ++NumPlayers;

@@ -1,17 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+public enum PlayerType
+{
+    PlayerNeutral = 2,        /// neutral
+	PlayerNobody = 3,        /// unused slot
+	PlayerComputer = 4,       /// computer player
+	PlayerPerson = 5,         /// human player
+	PlayerRescuePassive = 6,  /// rescued passive
+	PlayerRescueActive = 7,   /// rescued  active
+};
+public enum PlayerColor
+{
+    PlayerNeutral = 2,        /// neutral
+	PlayerNobody = 3,        /// unused slot
+	PlayerComputer = 4,       /// computer player
+	PlayerPerson = 5,         /// human player
+	PlayerRescuePassive = 6,  /// rescued passive
+	PlayerRescueActive = 7,   /// rescued  active
+};
 public class Player   {
     public int Index;        /// player as number
-	string Name;   /// name of non computer
-
+	public string Name;   /// name of non computer
+    public int color;
     public int Type;         /// type of player (human,computer,...)
-	int Race;         /// race of player (orc,human,...)
+	public int Race;         /// race of player (orc,human,...)
 	string AiName; /// AI for computer
 
     // friend enemy detection
-    int Team;          /// team of player
+    public int Team;          /// team of player
 	//unsigned Enemy;         /// enemy bit field for this player
 	//unsigned Allied;        /// allied bit field for this player
 	//unsigned SharedVision;  /// shared vision bit field
@@ -20,14 +37,14 @@ public class Player   {
 	int StartY;  /// map tile start Y position
 
     public int[] Resources=new int[(int)ResourceType.MaxCosts];      /// resources in store
-//	int LastResources[ResourceType.MaxCosts];  /// last values for revenue
-	//int Incomes[MaxCosts];        /// income of the resources
-	//int Revenue[MaxCosts];        /// income rate of the resources
+	public int[] LastResources = new int[(int)ResourceType.MaxCosts];  /// last values for revenue
+	public int[] Incomes = new int[(int)ResourceType.MaxCosts];        /// income of the resources
+	public int[] Revenue = new int[(int)ResourceType.MaxCosts];        /// income rate of the resources
 
     // FIXME: shouldn't use the constant
-   // int UnitTypesCount[UnitTypeMax];  /// total units of unit-type
+    // int UnitTypesCount[UnitTypeMax];  /// total units of unit-type
 
-    int AiEnabled;       /// handle AI on local computer
+    public bool AiEnabled;       /// handle AI on local computer
 	//PlayerAi* Ai;          /// Ai structure pointer
 
     public  Unit[] units=new Unit[Consts.UnitMax]; /// units of this player
@@ -40,7 +57,7 @@ public class Player   {
 	int BuildingLimit;   /// # buildings allowed
 	int TotalUnitLimit;  /// # total unit number allowed
 
-    int Score;           /// Points for killing ...
+    public int Score;           /// Points for killing ...
 	public int TotalUnitsMade;//生产过的总数
     public int TotalBuildingsMade;
     //int TotalResources[ResourceType.MaxCosts];

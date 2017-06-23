@@ -7,7 +7,7 @@ public class Main : MonoBehaviour {
     public static PlayerManager playerManager = new PlayerManager();
     public static MapManager mapManager = new MapManager();
     public static NetManager netManager = new NetManager();
-
+    public static ActionManager actionManager = new ActionManager();
     public CameraCotroller cameraCotroller;
 
     public SpriteRenderer spriteRenderer;

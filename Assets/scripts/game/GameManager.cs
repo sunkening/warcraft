@@ -59,7 +59,8 @@ public class GameManager : MonoBehaviour {
         //	}
         //}
         Map curmap = Main.mapManager.curMap;
-	for (int i = 0; i<Consts.PlayerMax; ++i) {
+	for (int i = 0; i<Consts.PlayerMax; ++i)
+    {
 		int playertype = curmap.Info.PlayerType[i];
 		// Network games only:
 		if (gameSettings.Presets[i].Type != GameSettings.SettingsPresetMapDefault) {
@@ -77,7 +78,7 @@ public class GameManager : MonoBehaviour {
         //
         // Load the map.
         //
-        InitUnitTypes(1);
+        //InitUnitTypes(1);
 
         LoadMap(filename, map);
 	}
