@@ -9,4 +9,8 @@ public class MapManager   {
     {
         
     }
+    public void loadMap(string mapPath)
+    {
+
+    }
 }

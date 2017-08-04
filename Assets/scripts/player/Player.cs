@@ -96,7 +96,7 @@ public class Player   {
        // memset(Incomes, 0, sizeof(Incomes));
        // memset(Revenue, 0, sizeof(Revenue));
       //  memset(UnitTypesCount, 0, sizeof(UnitTypesCount));
-        AiEnabled = 0;
+        AiEnabled = false;
         //  Ai = 0;
         units = new Unit[Consts.UnitMax];
         NumUnits = 0;

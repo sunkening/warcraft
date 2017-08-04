@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Main : MonoBehaviour {
+    
     public static UnitManager unitManager = new UnitManager();
     public static PlayerManager playerManager = new PlayerManager();
     public static MapManager mapManager = new MapManager();
     public static NetManager netManager = new NetManager();
     public static ActionManager actionManager = new ActionManager();
+    public static Mouse mouse = new Mouse();
     public CameraCotroller cameraCotroller;
 
     public SpriteRenderer spriteRenderer;
 
-
+    public int x;
+    public int y;
+    public int id;
     Unit unit = new Unit();
     void Awake()
     {

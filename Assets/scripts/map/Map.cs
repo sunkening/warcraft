@@ -100,6 +100,11 @@ public class Map
         yield return ResourceLoader.LoadAssetAsync(taskMapTilePrefab);
         mapTilePrefab = taskMapTilePrefab.asset as GameObject;
     }
+    public void loadMap(string mappath)
+    {
+
+    }
+
     public void createMap(int width_in_tile, int height_in_tile, int tileCfgId)
     {
         width = width_in_tile*2;
@@ -124,16 +129,19 @@ public class Map
                 tileGameObj.transform.position = new Vector3(j, 0, i);
 
                 maptile.spriteRenderers = new List<SpriteRenderer>();
-                maptile.spriteRenderers.Add(tileGameObj.transform.FindChild("Sprite0").GetComponent<SpriteRenderer>());
-                maptile.spriteRenderers.Add(tileGameObj.transform.FindChild("Sprite1").GetComponent<SpriteRenderer>());
-                maptile.spriteRenderers.Add(tileGameObj.transform.FindChild("Sprite2").GetComponent<SpriteRenderer>());
-                maptile.spriteRenderers.Add(tileGameObj.transform.FindChild("Sprite3").GetComponent<SpriteRenderer>());
+                maptile.spriteRenderers.Add(tileGameObj.transform.Find("Sprite0").GetComponent<SpriteRenderer>());
+                maptile.spriteRenderers.Add(tileGameObj.transform.Find("Sprite1").GetComponent<SpriteRenderer>());
+                maptile.spriteRenderers.Add(tileGameObj.transform.Find("Sprite2").GetComponent<SpriteRenderer>());
+                maptile.spriteRenderers.Add(tileGameObj.transform.Find("Sprite3").GetComponent<SpriteRenderer>());
                 maptile.spriteRenderers[0].sprite = tilesets[tileCfgId].getSprit(15);
                 mapTiles.Add(maptile);
             }
         }
     }
+    public void saveMap()
+    {
 
+    }
     public void refreshTileSprite(int x, int y)
     {
         //Dictionary<int ,int > tileId2num=new Dictionary<int, int>();

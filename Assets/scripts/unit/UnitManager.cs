@@ -308,7 +308,7 @@ public class UnitDrawerFactory : GameObjectFactory
 
     public override GameObject CreateGameObject()
     {
-        GameObject d = GameObject.Instantiate(GameManager. unitManager.characrerDrawerPrefab);
+        GameObject d = GameObject.Instantiate(Main. unitManager.characrerDrawerPrefab);
         SpriteDrawer drawer = d.AddComponent<SpriteDrawer>();
 
         return d;
@@ -316,7 +316,7 @@ public class UnitDrawerFactory : GameObjectFactory
 
     public override IEnumerator CreateGameObjectAsync(LoaderResult r)
     {
-        GameObject d = GameObject.Instantiate(GameManager.unitManager.characrerDrawerPrefab);
+        GameObject d = GameObject.Instantiate(Main.unitManager.characrerDrawerPrefab);
         SpriteDrawer drawer = d.AddComponent<SpriteDrawer>();
         r.isDone = true;
         r.asset = d;

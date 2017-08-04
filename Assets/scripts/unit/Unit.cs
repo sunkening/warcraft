@@ -159,7 +159,7 @@ public class Unit
 **  clears this saved order.*/
     Order savedOrder=new Order();           /// order to continue after current
 	Order newOrder= new Order();             /// order for new trained units
-	Order criticalOrder= new Order();        /// order to do as possible in breakable animation.
+	public Order criticalOrder = new Order();        /// order to do as possible in breakable animation.
     //char* AutoCastSpell;        /// spells to auto cast
     //unsigned AutoRepair : 1;    /// True if unit tries to repair on still action.
     public int frameNum;
@@ -173,7 +173,7 @@ public class Unit
     public void init(UnitType type,SpriteDrawer drawer)
     {
  
-       GameManager. unitManager.addUnit(this);
+       Main. unitManager.addUnit(this);
         //
         //  Initialise unit structure (must be zero filled!)
         //
@@ -413,7 +413,7 @@ public class Unit
         // Those should have been filtered. Check doesn't make sense with ReplayRevealMap
         //Assert(ReplayRevealMap || this->Type->VisibleUnderFog || this->IsVisible(ThisPlayer));
         
-        if (MapManager.isReveal || isVisible(GameManager.playerManager.thisPlayer))
+        if (MapManager.isReveal || isVisible(Main.playerManager.thisPlayer))
         {
             type = unitType;
             
@@ -496,7 +496,7 @@ public class Unit
         //        }
         //#endif
 
-        if (!isVisible(GameManager.playerManager.thisPlayer) && frame == UnitNotSeen)
+        if (!isVisible(Main.playerManager.thisPlayer) && frame == UnitNotSeen)
         {
             //DebugPrint("FIXME: Something is wrong, unit %d not seen but drawn time %lu?.\n" _C_
             //    this->Slot _C_ GameCycle);
