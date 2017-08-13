@@ -30,7 +30,7 @@ public class UnitType
 
 
     public int icon;
-    public int Animations;
+    public CharacterAnimation Animations;
     
 
 }

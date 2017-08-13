@@ -22,36 +22,37 @@ public class ActionStill  {
     public static void ActionStillGeneric(Unit unit, bool stand_ground)
     {
         // If unit is not bunkered and removed, wait
-        if (unit->Removed && (!unit->Container ||
-                !unit->Container->Type->CanTransport ||
-                !unit->Container->Type->AttackFromTransporter ||
-                unit->Type->Missile.Missile->Class == MissileClassNone))
+        if (unit.Removed && (unit.Container==null))
+            //||
+              //  !unit.Container.unitType.canTransport ||
+              //  !unit.Container.unitType.AttackFromTransporter ||
+              //  unit->Type->Missile.Missile->Class == MissileClassNone))
         {
             // If unit is in building or transporter it is removed.
             return;
         }
 
         // Animations
-        if (unit->SubAction)
+        if (unit.subAction>0)
         { // attacking unit in attack range.
-            AnimateActionAttack(unit);
+           // AnimateActionAttack(unit);
         }
         else
         {
-            UnitShowAnimation(unit, unit->Type->Animations->Still);
+            UnitShowAnimation(unit, unit.unitType.Animations.Still);
         }
 
-        if (unit->Anim.Unbreakable)
+       /* if (unit->Anim.Unbreakable)
         { // animation can't be aborted here
             return;
-        }
+        }*/
 
-        if (MoveRandomly(unit) || AutoCast(unit) || AutoRepair(unit))
+    /*    if (MoveRandomly(unit) || AutoCast(unit) || AutoRepair(unit))
         {
             return;
         }
 
-        AutoAttack(unit, stand_ground);
+        AutoAttack(unit, stand_ground);*/
     }
 
 }

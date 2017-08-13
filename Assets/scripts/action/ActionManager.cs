@@ -24,7 +24,7 @@ public class ActionManager  {
     **
     **  @return      The flags of the current script step.
 */
-    public  int UnitShowAnimation(Unit  unit,   Animation  anim) 
+    public  int UnitShowAnimation(Unit  unit, AnimationFram anim) 
     {
 	    return UnitShowAnimationScaled(unit, anim, 8);
     }
@@ -38,37 +38,41 @@ public class ActionManager  {
 **
 **  @return      The flags of the current script step.
 */
-public int UnitShowAnimationScaled(Unit unit, Animation anim, int scale)
+public int UnitShowAnimationScaled(Unit unit, AnimationFram anim, int scale)
 {
     int move;
 
     // Changing animations
-    if (unit->Anim.CurrAnim != anim)
+    if (unit.anim.CurrAnim != anim)
     {
         // Assert fails when transforming unit (upgrade-to).
-        Assert(!unit->Anim.Unbreakable);
-        unit->Anim.Anim = unit->Anim.CurrAnim = anim;
-        unit->Anim.Wait = 0;
+      //  Assert(!unit->Anim.Unbreakable);
+        unit.anim.Anim = unit.anim.CurrAnim = anim;
+        unit.anim.Wait = 0;
     }
 
     // Currently waiting
-    if (unit->Anim.Wait)
+    if (unit.anim.Wait>0)
     {
-        --unit->Anim.Wait;
-        if (!unit->Anim.Wait)
+        --unit.anim.Wait;
+        if (unit.anim.Wait == 0)
         {
             // Advance to next frame
-            unit->Anim.Anim = unit->Anim.Anim->Next;
-            if (!unit->Anim.Anim)
+            unit.anim.Anim = unit.anim.Anim.next;
+            if (unit.anim.Anim == null)
             {
-                unit->Anim.Anim = unit->Anim.CurrAnim;
+                unit.anim.Anim = unit.anim.CurrAnim;
+            }
+            else
+            {
+                unit.anim.Wait = unit.anim.Anim.wait << scale >> 8;
             }
         }
         return 0;
     }
 
     move = 0;
-    while (!unit->Anim.Wait)
+    /*while (unit.anim.Wait==0)
     {
         switch (unit->Anim.Anim->Type)
         {
@@ -182,9 +186,9 @@ public int UnitShowAnimationScaled(Unit unit, Animation anim, int scale)
                 unit->Anim.Anim = unit->Anim.CurrAnim;
             }
         }
-    }
+    }*/
 
-    --unit->Anim.Wait;
+   /* --unit->Anim.Wait;
     if (!unit->Anim.Wait)
     {
         // Advance to next frame
@@ -193,7 +197,7 @@ public int UnitShowAnimationScaled(Unit unit, Animation anim, int scale)
         {
             unit->Anim.Anim = unit->Anim.CurrAnim;
         }
-    }
+    }*/
     return move;
 }
 
@@ -251,7 +255,7 @@ public void UnitActions( )
                     table[i--] = table[--tabsize];
                     continue;
                 }
-                HandleBuffs(table[i], Consts.CYCLES_PER_SECOND);
+               // HandleBuffs(table[i], Consts.CYCLES_PER_SECOND);
             }
         }
 
@@ -265,7 +269,7 @@ public void UnitActions( )
                     table[i--] = table[--tabsize];
                     continue;
                 }
-                HandleRegenerations(table[i]);
+               // HandleRegenerations(table[i]);
             }
         }
 
@@ -402,21 +406,28 @@ public void UnitActions( )
                 // Note subaction 0 should reset.
                 //
                 unit.subAction = unit.actionState = 0;
-
-                if (IsOnlySelected(unit))
+                //为什么要在这里判断单位的选择？
+               /* if (IsOnlySelected(unit))
                 { // update display for new action
                     SelectedUnitChanged();
-                }
+                }*/
             }
         }
 
         //
         // Select action. FIXME: should us function pointers in unit structure.
         //
-        HandleActionTable[unit->Orders[0]->Action](unit);
+        HandleActionTable(unit.orders[0].action,unit);
     }
     public static void HandleActionTable(UnitAction action,Unit unit)
     {
-
+        switch(action)
+        {
+            case UnitAction.UnitActionStill:
+                {
+                    ActionStill.HandleActionStill(unit);
+                    break;
+                }
+        }
     }
 }
