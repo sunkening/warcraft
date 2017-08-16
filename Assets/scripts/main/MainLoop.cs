@@ -18,7 +18,7 @@ public class MainLoop   {
                 ++GameManager.GameCycle;
                // MultiPlayerReplayEachCycle();
                // NetworkCommands(); // Get network commands
-                UnitActions();      // handle units
+                Main.actionManager.UnitActions();      // handle units
               //  MissileActions();   // handle missiles
               //  PlayersEachCycle(); // handle players
               //  UpdateTimer();      // update game timer

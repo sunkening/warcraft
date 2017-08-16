@@ -26,7 +26,7 @@ public class ActionManager  {
 */
     public  int UnitShowAnimation(Unit  unit,   Animation  anim) 
     {
-	return UnitShowAnimationScaled(unit, anim, 8);
+	    return UnitShowAnimationScaled(unit, anim, 8);
     }
 
 /**
@@ -338,7 +338,7 @@ public void UnitActions( )
     **
     **  @param unit  Pointer to handled unit.
 */
-    public static void HandleUnitAction(Unit unit)
+    public   void HandleUnitAction(Unit unit)
     {
         int z;
 
@@ -350,20 +350,18 @@ public void UnitActions( )
             if (unit.criticalOrder.action != UnitAction.UnitActionStill)
             {
                 HandleActionTable(unit.criticalOrder.action,unit);
-                unit->CriticalOrder.Action = UnitActionStill;
+                unit.criticalOrder.action = UnitAction.UnitActionStill;
             }
 
             //
             // o Look if we have a new order and old finished.
             // o Or the order queue should be flushed.
             //
-            if (unit->OrderCount > 1 &&
-                    (unit->Orders[0]->Action == UnitActionStill || unit->OrderFlush))
+            if (unit.orderCount > 1 && (unit.orders[0].action == UnitAction.UnitActionStill || unit.orderFlush>0))
             {
-
-                if (unit->Removed)
+                if (unit.Removed)
                 { // FIXME: johns I see this as an error
-                    DebugPrint("Flushing removed unit\n");
+                    //DebugPrint("Flushing removed unit\n");
                     // This happens, if building with ALT+SHIFT.
                     return;
                 }
@@ -371,45 +369,39 @@ public void UnitActions( )
                 //
                 // Release pending references.
                 //
-                if (unit->Orders[0]->Goal)
+                if (unit.orders[0].goal!=null)
                 {
                     // If mining decrease the active count on the resource.
-                    if (unit->Orders[0]->Action == UnitActionResource &&
-                            unit->SubAction == 60)
+                    if (unit.orders[0].action == UnitAction.UnitActionResource &&
+                            unit.subAction == 60)
                     {
                         // FIXME: SUB_GATHER_RESOURCE ?
-                        unit->Orders[0]->Goal->Data.Resource.Active--;
-                        Assert(unit->Orders[0]->Goal->Data.Resource.Active >= 0);
+                    //    unit.orders[0].goal.data.Resource.Active--;
+                        //Assert(unit->Orders[0]->Goal->Data.Resource.Active >= 0);
                     }
                     // Still shouldn't have a reference unless attacking
-                    Assert(!(unit->Orders[0]->Action == UnitActionStill && !unit->SubAction));
-                    unit->Orders[0]->Goal->RefsDecrease();
+                  //  Assert(!(unit->Orders[0]->Action == UnitAction.UnitActionStill && !unit->SubAction));
+                  //  unit.orders[0].goal.RefsDecrease();
                 }
-                if (unit->CurrentResource)
+                /*if (unit->CurrentResource)
                 {
                     if (unit->Type->ResInfo[unit->CurrentResource]->LoseResources &&
                         unit->ResourcesHeld < unit->Type->ResInfo[unit->CurrentResource]->ResourceCapacity)
                     {
                         unit->ResourcesHeld = 0;
                     }
-                }
+                }*/
 
                 //
                 // Shift queue with structure assignment.
                 //
-                unit->OrderCount--;
-                unit->OrderFlush = 0;
-                delete unit->Orders[0];
-                for (z = 0; z < unit->OrderCount; ++z)
-                {
-                    unit->Orders[z] = unit->Orders[z + 1];
-                }
-                unit->Orders.pop_back();
-
+                unit.orderCount--;
+                unit.orderFlush = 0;
+                unit.orders.RemoveAt(0);
                 //
                 // Note subaction 0 should reset.
                 //
-                unit->SubAction = unit->State = 0;
+                unit.subAction = unit.actionState = 0;
 
                 if (IsOnlySelected(unit))
                 { // update display for new action

@@ -136,9 +136,9 @@ public class Unit
     //int VisCount[PlayerMax];     /// Unit visibility counts
     public SeenStuff seen=new SeenStuff();
 
-    //unsigned SubAction : 8; /// sub-action of unit
+    public int  subAction  ; /// sub-action of unit
 	public float waitTime;          /// action counter
-	int actionState  ;     /// action state
+	public int actionState  ;     /// action state
 	int Blink ;     /// Let selection rectangle blink
 	public bool Moving  ;
 
@@ -149,8 +149,8 @@ public class Unit
     public int resourcesHeld;      /// Resources Held by a unit
 	public ResourceType currentResourceType;
 
-    int OrderCount;            /// how many orders in queue
-	char OrderFlush;            /// cancel current order, take next
+    public int orderCount;            /// how many orders in queue
+	public int orderFlush;            /// cancel current order, take next
 	public List<Order> orders=new List<Order>(); /// orders to process
         /**  This order is executed, if the current order is finished.
 ** This is used for attacking units, to return to the old
@@ -237,6 +237,11 @@ public class Unit
         criticalOrder.x = criticalOrder.y = -1;
        // Assert(!CriticalOrder.Goal);
     }
+    /// Check if unit is the currently only selected
+   /* public bool IsOnlySelected(unit)
+    {
+        return (NumSelected == 1 && Selected[0] == (unit));
+    }*/
     public void updateHeading()
     {
 
