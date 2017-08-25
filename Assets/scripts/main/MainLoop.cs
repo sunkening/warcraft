@@ -69,17 +69,17 @@ public class MainLoop   {
                 }
             }
 
-            TriggersEachCycle();  // handle triggers
-            UpdateMessages();     // update messages
+           // TriggersEachCycle();  // handle triggers
+           // UpdateMessages();     // update messages
 
-            CheckMusicFinished(); // Check for next song
+           // CheckMusicFinished(); // Check for next song
 
             //
             // Map scrolling
             //
-            DoScrollArea(MouseScrollState | KeyScrollState, (KeyModifiers & ModifierControl) != 0);
+           // DoScrollArea(MouseScrollState | KeyScrollState, (KeyModifiers & ModifierControl) != 0);
 
-            if (FastForwardCycle > GameCycle &&
+          /*  if (FastForwardCycle > GameCycle &&
                     RealVideoSyncSpeed != VideoSyncSpeed)
             {
                 RealVideoSyncSpeed = VideoSyncSpeed;
@@ -103,7 +103,7 @@ public class MainLoop   {
             if (FastForwardCycle == GameCycle)
             {
                 VideoSyncSpeed = RealVideoSyncSpeed;
-            }
+            }*/
             if (FastForwardCycle <= GameCycle || !(GameCycle & 0x3f))
             {
                 WaitEventsOneFrame();
@@ -112,6 +112,7 @@ public class MainLoop   {
             {
                 NetworkRecover(); // recover network
             }
+            yield return 0;
         }
     }
 }

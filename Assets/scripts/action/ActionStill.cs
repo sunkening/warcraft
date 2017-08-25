@@ -39,7 +39,7 @@ public class ActionStill  {
         }
         else
         {
-            UnitShowAnimation(unit, unit.unitType.Animations.Still);
+            Main.actionManager.UnitShowAnimation(unit, unit.unitType.Animations.Still);
         }
 
        /* if (unit->Anim.Unbreakable)
